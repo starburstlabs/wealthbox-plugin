@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "wealthbox": {
+      "type": "http",
+      "url": "https://mcp.crmworkspace.com/mcp"
+    }
+  }
+}

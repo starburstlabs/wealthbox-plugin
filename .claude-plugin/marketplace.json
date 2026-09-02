@@ -1,0 +1,27 @@
+{
+  "name": "wealthbox-plugin",
+  "description": "Wealthbox advisor workflow plugin for Claude Code.",
+  "owner": {
+    "name": "Wealthbox",
+    "email": "mcp@wealthbox.com",
+    "url": "https://www.wealthbox.com"
+  },
+  "plugins": [
+    {
+      "name": "wealthbox-plugin",
+      "displayName": "Wealthbox",
+      "source": "./",
+      "description": "Advisor workflows for Wealthbox CRM: onboarding data orchestration, client service request tracking, recommendation and suitability records, client meeting preparation, and identifying clients affected by external changes.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Wealthbox",
+        "email": "mcp@wealthbox.com",
+        "url": "https://www.wealthbox.com"
+      },
+      "homepage": "https://www.wealthbox.com",
+      "repository": "https://github.com/starburstlabs/wealthbox-plugin",
+      "license": "MIT",
+      "keywords": ["wealthbox", "crm", "financial-advisor", "wealth-management", "ria"]
+    }
+  ]
+}
