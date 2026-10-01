@@ -1,8 +1,8 @@
 # Acceptance criteria — identify-clients-affected-by-change
 
-Scenarios this skill should handle correctly. This is source material for a real
-`claude plugin eval` suite (`evals/<case>/prompt.md` + `graders/*.md`), not a substitute for one —
-convert it once `plugin eval` early access is available.
+Scenarios this skill should handle correctly. This is source material for a future automated
+test suite (structured as `cases/<case>/prompt.md` + `graders/*.md`), not a substitute for one —
+convert it once that tooling is available.
 
 ## Scenario 1: Investment-platform notice
 
