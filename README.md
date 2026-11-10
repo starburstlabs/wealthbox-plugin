@@ -1,6 +1,6 @@
 # Wealthbox Plugin
 
-Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. A Claude Code plugin packaging five skills that orchestrate Wealthbox alongside other connected systems for common advisor workflows.
+Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. A Claude Code and Codex plugin packaging five skills that orchestrate Wealthbox alongside other connected systems for common advisor workflows.
 
 ## Skills
 
@@ -38,6 +38,11 @@ claude plugin install wealthbox-plugin@wealthbox-plugin
 Restart Claude Code, or run `/reload-plugins`, to activate it. Run `claude plugin list` (or ask
 Claude) to confirm `wealthbox-plugin` is enabled with all five skills.
 
+### Codex support
+
+The Codex manifest reuses the same five skills and bundled MCP configuration.
+Bundled MCP support requires the Codex `mcp_2026_07_28` feature. The install commands above are for Claude Code.
+
 ### Connect Wealthbox
 
 Installing the plugin loads its bundled `.mcp.json` — no manual MCP server setup and no API keys.
@@ -54,6 +59,7 @@ Authentication uses OAuth 2.0; no credentials are stored in this repository.
 
 ## Package structure
 
+- `.codex-plugin/plugin.json` contains Codex metadata and references the shared skills and MCP configuration.
 - `.claude-plugin/plugin.json` — Claude plugin metadata.
 - `.claude-plugin/marketplace.json` — lets the plugin be added directly from this repository with
   `/plugin marketplace add`.
