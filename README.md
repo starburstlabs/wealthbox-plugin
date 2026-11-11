@@ -19,52 +19,39 @@ Each skill reads before it writes: it presents a proposal, exception list, or dr
 
 ## Setup
 
-### Configure Codex
+Install the plugin in Claude Code or Codex, then connect your Wealthbox account.
 
-If you use Codex, enable the MCP protocol support required by Wealthbox:
+### Claude Code
+
+Run these commands in your terminal:
 
 ```sh
-codex features enable mcp_2026_07_28
+claude plugin marketplace add starburstlabs/wealthbox-plugin
+claude plugin install wealthbox-plugin@wealthbox-plugin
 ```
 
-### Install
-
-**In Claude Code:**
+To install from inside a Claude Code session instead, use the `/plugin` command:
 
 ```text
 /plugin marketplace add starburstlabs/wealthbox-plugin
 /plugin install wealthbox-plugin@wealthbox-plugin
 ```
 
-**In Codex:**
+Start a new session, then run `claude plugin list` to confirm that the plugin is installed.
 
-First, register the marketplace from your terminal:
+### Codex
 
-```sh
-codex plugin marketplace add starburstlabs/wealthbox-plugin
-```
-
-Then open the plugin browser in Codex:
-
-```text
-/plugins
-```
-
-Select the `wealthbox-plugin` marketplace and install `wealthbox-plugin`.
-
-**Or via terminal:**
+Run these commands in your terminal:
 
 ```sh
-# Claude Code
-claude plugin marketplace add starburstlabs/wealthbox-plugin
-claude plugin install wealthbox-plugin@wealthbox-plugin
+# Enable the MCP protocol version that Wealthbox requires
+codex features enable mcp_2026_07_28
 
-# Codex
 codex plugin marketplace add starburstlabs/wealthbox-plugin
 codex plugin add wealthbox-plugin@wealthbox-plugin
 ```
 
-Start a new session after installation. Run `claude plugin list` or `codex plugin list` to confirm that the plugin is installed.
+Start a new session, then run `codex plugin list` to confirm that the plugin is installed.
 
 ### Connect Wealthbox
 
