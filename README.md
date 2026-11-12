@@ -65,12 +65,44 @@ Run `/mcp` in either client to inspect the connection and available tools.
 
 The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication uses OAuth 2.0.
 
+## OpenAI package
+
+The OpenAI package has its own manifests, version, review notes and extra skill
+under [`openai/`](openai/README.md). The existing Claude and Codex files at the
+repository root keep their own version and installation paths.
+
+From this repository root, run Python 3.9 or newer:
+
+```sh
+python3 script/package_openai.py
+```
+
+This builds `dist/openai/wealthbox/` and `dist/wealthbox-openai.zip`. The builder
+copies the five shared skills from `skills/`, the OpenAI-specific workspace skill
+from `openai/skills/`, and the shared SVG from `assets/`. The generated plugin is
+self-contained: its `plugin.json`, `mcp.json`, `skills/` and `assets/` are at its
+own root. Packaged manifests do not refer outside that generated package.
+
+To choose another ZIP location:
+
+```sh
+python3 script/package_openai.py /private/tmp/wealthbox-mcp-tools-and-skills.zip
+```
+
+`dist/` is generated and ignored by Git. Build it before installing or uploading
+the OpenAI package; `openai/` by itself is source, not the complete distribution.
+See [OpenAI release preparation](openai/CHATGPT-REVIEW.md) for the host checks and
+remaining publication work.
+
 ## Package structure
 
 - `.codex-plugin/plugin.json` contains Codex metadata and references the shared skills and MCP configuration.
 - `.claude-plugin/plugin.json` — Claude plugin metadata.
 - `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex.
 - `.mcp.json` — production Wealthbox MCP server connection.
+- `openai/` — OpenAI source manifests, release notes and platform-specific skill.
+- `script/package_openai.py` — OpenAI distribution builder and validator.
+- `dist/` — generated OpenAI plugin directory and ZIP; not committed.
 - `skills/` — advisor workflows, each with a `SKILL.md` and a `references/acceptance-criteria.md`
   describing the scenarios it should handle correctly.
 
