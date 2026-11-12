@@ -29,8 +29,8 @@
     "privacyPolicyURL": "https://www.wealthbox.com/privacy-policy/",
     "supportURL": "https://help.wealthbox.com/",
     "termsOfServiceURL": "https://www.wealthbox.com/terms-of-service/",
-    "logo": "./assets/icon.png",
-    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.svg",
+    "composerIcon": "./assets/icon.svg",
     "defaultPrompt": [
       "Find my client Alex Morgan.",
       "Prepare for my meeting with Alex Morgan.",
