@@ -1,8 +1,10 @@
 # Wealthbox Plugin
 
-Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin packages five advisor workflow skills for Claude Code and Codex.
+Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin connects ChatGPT, Codex, and Claude Code to Wealthbox MCP tools and packages six advisor skills. Results, meeting briefs, and proposed changes appear in the conversation; no custom UI is required.
 
 ## Skills
+
+- **`wealthbox-workspace`** — Resolve workspaces and contacts, present contact profiles and open work in chat, and review note/task writes before execution.
 
 - **`orchestrate-onboarding-data`** — Build a verified onboarding data set from uploaded materials and connected systems, reconcile conflicting sources, and route the resulting information and work to Wealthbox and the appropriate specialist platforms.
 - **`manage-client-service-request`** — Convert a client request into a tracked, multi-step Wealthbox service process, with requests involving fund movement or a compliance decision always escalated rather than processed.
@@ -19,7 +21,7 @@ Each skill reads before it writes: it presents a proposal, exception list, or dr
 
 ## Setup
 
-Install the plugin in Claude Code or Codex, then connect your Wealthbox account.
+Install the plugin in a supported host, then connect your Wealthbox account through OAuth. The production MCP server must expose the conversational catalog described in `CHATGPT-REVIEW.md`.
 
 ### Claude Code
 
@@ -65,8 +67,36 @@ Run `/mcp` in either client to inspect the connection and available tools.
 
 The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication uses OAuth 2.0.
 
+## Build the OpenAI package
+
+From this directory, run Python 3.9 or newer:
+
+```sh
+python3 script/package_openai.py /private/tmp/wealthbox-mcp-tools-and-skills.zip
+```
+
+The command validates the portable manifests, production OAuth connection, skill
+inventory, icon references and absence of UI-only tool dependencies in skills.
+It writes a reproducible ZIP containing `plugin.json`, `mcp.json`, all six skills,
+the assets, README, license and review preparation notes. It omits Git metadata,
+local account bindings, compatibility manifests and development files.
+
+For private ChatGPT testing, register the MCP endpoint with **Add custom MCP
+server**, complete OAuth, and test the package in a new conversation. The ZIP
+contains a remote connection declaration; building it does not deploy the server
+or prove that a host has connected to it.
+
+Meeting follow-up uses individual `CreateNote` and `CreateTask` calls after
+conversational approval. The calls are not atomic. Keep returned IDs and reconcile
+partial or uncertain results before retrying. There is no embedded Save button.
+
+See [release preparation](CHATGPT-REVIEW.md) for host checks and the remaining
+publication materials. A valid ZIP is not a completed public submission.
+
 ## Package structure
 
+- `plugin.json` is the portable manifest and owns the OpenAI listing metadata.
+- `mcp.json` declares the production HTTPS MCP connection and OAuth scopes.
 - `.codex-plugin/plugin.json` contains Codex metadata and references the shared skills and MCP configuration.
 - `.claude-plugin/plugin.json` — Claude plugin metadata.
 - `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex.

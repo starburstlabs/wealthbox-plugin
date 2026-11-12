@@ -1,6 +1,6 @@
 {
   "name": "wealthbox-plugin",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Advisor workflows for Wealthbox CRM: onboarding data orchestration, client service request tracking, recommendation and suitability records, client meeting preparation, and identifying clients affected by external changes.",
   "author": {
     "name": "Wealthbox",
@@ -21,12 +21,24 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Wealthbox",
-    "shortDescription": "Advisor workflows for CRM",
-    "longDescription": "Advisor workflows for Wealthbox CRM: onboarding data orchestration, client service request tracking, recommendation and suitability records, client meeting preparation, and identifying clients affected by external changes.",
+    "shortDescription": "Prepare and track client work",
+    "longDescription": "Find and review Wealthbox contacts, notes, tasks, events, and workflows in conversation. Prepare sourced client meeting briefs and proposed follow-up work. Create or update CRM records after advisor approval. Client messages remain drafts; financial transactions are not executed.",
     "developerName": "Wealthbox",
-    "composerIcon": "./assets/icon.svg",
-    "logo": "./assets/icon.svg",
+    "category": "Productivity",
     "websiteURL": "https://www.wealthbox.com",
-    "privacyPolicyURL": "https://www.wealthbox.com/privacy-policy/"
+    "privacyPolicyURL": "https://www.wealthbox.com/privacy-policy/",
+    "supportURL": "https://help.wealthbox.com/",
+    "termsOfServiceURL": "https://www.wealthbox.com/terms-of-service/",
+    "logo": "./assets/icon.png",
+    "composerIcon": "./assets/icon.png",
+    "defaultPrompt": [
+      "Find my client Alex Morgan.",
+      "Prepare for my meeting with Alex Morgan.",
+      "Draft a meeting note and follow-up tasks for my review."
+    ],
+    "capabilities": [
+      "Read",
+      "Write"
+    ]
   }
 }
