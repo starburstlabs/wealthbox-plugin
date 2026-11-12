@@ -5,6 +5,8 @@ import argparse
 import json
 from pathlib import Path
 import re
+import shutil
+import tempfile
 from urllib.parse import urlsplit
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
@@ -23,6 +25,32 @@ def require(condition, message):
 
 def read_json(path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def source_files(repository):
+    """Map shared and OpenAI-only source to paths inside the generated package."""
+    repository = repository.resolve()
+    files = {}
+
+    def add(source, target):
+        require(target not in files, f"Duplicate package path: {target}")
+        require(source.is_file() and not source.is_symlink(), f"Missing source file or symlink: {source}")
+        require(source.resolve().is_relative_to(repository), f"Source escapes the repository: {source}")
+        files[target] = source
+
+    for name in ("plugin.json", "mcp.json", "README.md", "CHATGPT-REVIEW.md"):
+        add(repository / "openai" / name, Path(name))
+    add(repository / "LICENSE", Path("LICENSE"))
+    for source_root, target_root in (
+        (repository / "skills", Path("skills")),
+        (repository / "openai/skills", Path("skills")),
+        (repository / "assets", Path("assets")),
+    ):
+        for path in source_root.rglob("*"):
+            require(not path.is_symlink(), f"Source cannot contain symlinks: {path}")
+            if path.is_file():
+                add(path, target_root / path.relative_to(source_root))
+    return files
 
 
 def package_files(root):
@@ -79,25 +107,42 @@ def package_files(root):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("output", type=Path, help="ZIP destination outside the plugin directory")
+    parser.add_argument("output", type=Path, nargs="?", help="ZIP destination; defaults to dist/wealthbox-openai.zip")
     arguments = parser.parse_args()
-    root = Path(__file__).resolve().parents[1]
-    output = arguments.output.resolve()
-    require(not output.is_relative_to(root), "Write the archive outside the plugin directory")
-    files, skill_count = package_files(root)
-    output.parent.mkdir(parents=True, exist_ok=True)
-    with ZipFile(output, "w", compression=ZIP_DEFLATED) as archive:
-        for path in files:
-            entry = ZipInfo(path.relative_to(root).as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
-            entry.compress_type = ZIP_DEFLATED
-            entry.external_attr = 0o100644 << 16
-            archive.writestr(entry, path.read_bytes())
+    repository = Path(__file__).resolve().parents[1]
+    distribution = repository / "dist"
+    root = distribution / "openai/wealthbox"
+    output = arguments.output.resolve() if arguments.output else distribution / "wealthbox-openai.zip"
+    require(not output.is_relative_to(repository) or output.is_relative_to(distribution),
+            "Write the archive outside the source tree or under dist/")
+    require(not output.is_relative_to(root), "Write the archive outside the generated plugin directory")
+    require(output.suffix == ".zip", "Archive destination must end in .zip")
+    sources = source_files(repository)
+    distribution.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix="openai-", dir=distribution) as temporary:
+        staging = Path(temporary)
+        for target, source in sources.items():
+            destination = staging / target
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+        files, skill_count = package_files(staging)
+        output.parent.mkdir(parents=True, exist_ok=True)
+        with ZipFile(output, "w", compression=ZIP_DEFLATED) as archive:
+            for path in files:
+                entry = ZipInfo(path.relative_to(staging).as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
+                entry.compress_type = ZIP_DEFLATED
+                entry.external_attr = 0o100644 << 16
+                archive.writestr(entry, path.read_bytes())
+        if root.exists():
+            shutil.rmtree(root)
+        shutil.copytree(staging, root)
     with ZipFile(output) as archive:
         require(archive.testzip() is None, "Archive integrity check failed")
         require(json.loads(archive.read("plugin.json")) == read_json(root / "plugin.json"),
                 "Archive manifest differs from source")
     print(f"Built {output}: {len(files)} files, {skill_count} skills, production OAuth MCP connection")
-    print("This is a source package. Production catalog, host behavior and submission materials require separate checks.")
+    print(f"Plugin directory: {root}")
+    print("Production catalog, host behavior and submission materials require separate checks.")
 
 
 if __name__ == "__main__":

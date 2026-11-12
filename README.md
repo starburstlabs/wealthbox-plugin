@@ -1,10 +1,8 @@
 # Wealthbox Plugin
 
-Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin connects ChatGPT, Codex, and Claude Code to Wealthbox MCP tools and packages six advisor skills. Results, meeting briefs, and proposed changes appear in the conversation; no custom UI is required.
+Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin packages five advisor workflow skills for Claude Code and Codex.
 
 ## Skills
-
-- **`wealthbox-workspace`** — Resolve workspaces and contacts, present contact profiles and open work in chat, and review note/task writes before execution.
 
 - **`orchestrate-onboarding-data`** — Build a verified onboarding data set from uploaded materials and connected systems, reconcile conflicting sources, and route the resulting information and work to Wealthbox and the appropriate specialist platforms.
 - **`manage-client-service-request`** — Convert a client request into a tracked, multi-step Wealthbox service process, with requests involving fund movement or a compliance decision always escalated rather than processed.
@@ -21,7 +19,7 @@ Each skill reads before it writes: it presents a proposal, exception list, or dr
 
 ## Setup
 
-Install the plugin in a supported host, then connect your Wealthbox account through OAuth. The production MCP server must expose the conversational catalog described in `CHATGPT-REVIEW.md`.
+Install the plugin in Claude Code or Codex, then connect your Wealthbox account.
 
 ### Claude Code
 
@@ -67,40 +65,44 @@ Run `/mcp` in either client to inspect the connection and available tools.
 
 The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication uses OAuth 2.0.
 
-## Build the OpenAI package
+## OpenAI package
 
-From this directory, run Python 3.9 or newer:
+The OpenAI package has its own manifests, version, review notes and extra skill
+under [`openai/`](openai/README.md). The existing Claude and Codex files at the
+repository root keep their own version and installation paths.
+
+From this repository root, run Python 3.9 or newer:
+
+```sh
+python3 script/package_openai.py
+```
+
+This builds `dist/openai/wealthbox/` and `dist/wealthbox-openai.zip`. The builder
+copies the five shared skills from `skills/`, the OpenAI-specific workspace skill
+from `openai/skills/`, and the shared SVG from `assets/`. The generated plugin is
+self-contained: its `plugin.json`, `mcp.json`, `skills/` and `assets/` are at its
+own root. Packaged manifests do not refer outside that generated package.
+
+To choose another ZIP location:
 
 ```sh
 python3 script/package_openai.py /private/tmp/wealthbox-mcp-tools-and-skills.zip
 ```
 
-The command validates the portable manifests, production OAuth connection, skill
-inventory, icon references and absence of UI-only tool dependencies in skills.
-It writes a reproducible ZIP containing `plugin.json`, `mcp.json`, all six skills,
-the assets, README, license and review preparation notes. It omits Git metadata,
-local account bindings, compatibility manifests and development files.
-
-For private ChatGPT testing, register the MCP endpoint with **Add custom MCP
-server**, complete OAuth, and test the package in a new conversation. The ZIP
-contains a remote connection declaration; building it does not deploy the server
-or prove that a host has connected to it.
-
-Meeting follow-up uses individual `CreateNote` and `CreateTask` calls after
-conversational approval. The calls are not atomic. Keep returned IDs and reconcile
-partial or uncertain results before retrying. There is no embedded Save button.
-
-See [release preparation](CHATGPT-REVIEW.md) for host checks and the remaining
-publication materials. A valid ZIP is not a completed public submission.
+`dist/` is generated and ignored by Git. Build it before installing or uploading
+the OpenAI package; `openai/` by itself is source, not the complete distribution.
+See [OpenAI release preparation](openai/CHATGPT-REVIEW.md) for the host checks and
+remaining publication work.
 
 ## Package structure
 
-- `plugin.json` is the portable manifest and owns the OpenAI listing metadata.
-- `mcp.json` declares the production HTTPS MCP connection and OAuth scopes.
 - `.codex-plugin/plugin.json` contains Codex metadata and references the shared skills and MCP configuration.
 - `.claude-plugin/plugin.json` — Claude plugin metadata.
 - `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex.
 - `.mcp.json` — production Wealthbox MCP server connection.
+- `openai/` — OpenAI source manifests, release notes and platform-specific skill.
+- `script/package_openai.py` — OpenAI distribution builder and validator.
+- `dist/` — generated OpenAI plugin directory and ZIP; not committed.
 - `skills/` — advisor workflows, each with a `SKILL.md` and a `references/acceptance-criteria.md`
   describing the scenarios it should handle correctly.
 
