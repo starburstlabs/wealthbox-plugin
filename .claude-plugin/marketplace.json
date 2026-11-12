@@ -12,7 +12,7 @@
       "displayName": "Wealthbox",
       "source": "./",
       "description": "Advisor workflows for Wealthbox CRM: onboarding data orchestration, client service request tracking, recommendation and suitability records, client meeting preparation, and identifying clients affected by external changes.",
-      "version": "0.2.0",
+      "version": "0.1.0",
       "author": {
         "name": "Wealthbox",
         "email": "mcp@wealthbox.com",
