@@ -5,10 +5,11 @@ Tool results and proposed writes are presented in conversation. There are no
 custom app views or app-bound approval flows in this package.
 
 The complete OpenAI package is checked in under `openai/`, including copies of
-the five root advisor skills, the SVG icon and license. No build step is required.
+the five advisor skills, SVG icon and license also included in `claude/`. No build
+step is required.
 Use that directory for local installation, or follow its README to create a ZIP.
-The existing Claude and Codex compatibility manifests keep their separate
-versions and paths.
+The Claude Code package and its Codex compatibility files live in `claude/`
+and keep their separate versions. The root marketplace points to that package.
 
 The paired `crm-web` branch is `codex/wealthbox-mcp-tools-and-skills`, based on
 `f50ae18eb12`. It exposes the existing conversational CRM tool catalog. Package

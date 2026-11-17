@@ -11,10 +11,10 @@ This directory is a complete plugin. It contains portable `plugin.json` and
 review preparation notes. Use this directory directly for local installation;
 no build step is required. All required files are contained in this directory.
 
-The five advisor skills and icon are checked-in copies of the root package's
-files. Maintain the packages separately for now. When a change applies to both,
-update both copies. The existing Claude and Codex compatibility files at the
-repository root keep their own versions and installation paths.
+The five advisor skills and icon have separate copies in this package and in
+`claude/`. Maintain the packages separately for now. When a change applies to both,
+update both copies. The Claude Code package and its existing Codex compatibility
+files live in `claude/` and keep their own versions and installation paths.
 
 ## Create an upload archive
 

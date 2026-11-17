@@ -1,6 +1,15 @@
 # Wealthbox Plugin
 
-Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin packages five advisor workflow skills for Claude Code and Codex.
+Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server.
+
+This repository contains two complete packages:
+
+- [`claude/`](claude/README.md) contains the Claude Code package and its existing Codex compatibility files, with five advisor skills.
+- [`openai/`](openai/README.md) contains the OpenAI package for ChatGPT and Codex, with the five advisor skills and an additional conversational workspace skill.
+
+Both directories contain their required manifests, skills, icon and license.
+No build step is required. The marketplace at `.claude-plugin/marketplace.json`
+points to `claude/` for the Claude Code and Codex installation commands below.
 
 ## Skills
 
@@ -70,10 +79,10 @@ The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication u
 The complete OpenAI package is checked in under [`openai/`](openai/README.md).
 It contains its own manifests, six skills, SVG icon, license and review notes.
 Use that directory directly for local installation; no build step is required.
-The existing Claude and Codex files at the repository root keep their own
-versions and installation paths.
+The Claude Code package and its Codex compatibility files live in `claude/`
+and keep their own versions. The marketplace installation commands stay the same.
 
-The five advisor skills and icon in `openai/` are copies of the root files.
+The five advisor skills and icon have separate copies in `claude/` and `openai/`.
 Maintain the two packages separately for now. When a change applies to both,
 update both copies.
 
@@ -91,14 +100,11 @@ remaining publication work.
 
 ## Package structure
 
-- `.codex-plugin/plugin.json` contains Codex metadata and references the shared skills and MCP configuration.
-- `.claude-plugin/plugin.json` — Claude plugin metadata.
-- `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex.
-- `.mcp.json` — production Wealthbox MCP server connection.
-- `openai/` — complete OpenAI package with manifests, six skills, assets, license and release notes.
-- `dist/` — release ZIP files; not committed.
-- `skills/` — advisor workflows, each with a `SKILL.md` and a `references/acceptance-criteria.md`
-  describing the scenarios it should handle correctly.
+- `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex and points to `./claude`.
+- `claude/` contains the complete Claude Code package, Codex compatibility manifest, MCP connection, five skills, icon, README and license.
+- `openai/` contains the complete OpenAI package, with portable manifests, six skills, icon, README, license and review notes.
+- `dist/` contains release ZIP files and is not committed.
+- `LICENSE` contains the repository license; each package also contains a copy.
 
 ## Privacy Policy
 
