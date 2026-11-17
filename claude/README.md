@@ -2,9 +2,9 @@
 
 Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin packages five advisor workflow skills for Claude Code.
 
-This directory is the complete Claude Code package and includes its own
-marketplace. No build step is required. ChatGPT and Codex use the separate
-`openai/` package; this directory contains no Codex compatibility manifest.
+Install this package in Claude Code using its local marketplace, as described
+below. The manifest, MCP connection, five skills, icon and license are included
+in this directory. No build step is required.
 
 ## Skills
 
@@ -52,7 +52,9 @@ Start a new session, then run `claude plugin list` to confirm that the plugin is
 
 ### Connect Wealthbox
 
-The plugin includes its MCP server configuration. Your client prompts you to connect Wealthbox during installation or first use.
+The plugin includes its MCP server configuration. After installation, open
+`/mcp` in Claude Code to inspect the Wealthbox connection and authenticate if
+needed.
 
 1. Sign in to Wealthbox in your browser.
 2. Review and approve the requested read and write access.
@@ -76,6 +78,12 @@ rm -f claude/dist/wealthbox-claude.zip
 The archive is written to `claude/dist/wealthbox-claude.zip`. It includes the
 plugin files and excludes the marketplace catalog and output `dist/` directory.
 `claude/dist/` is ignored by Git. Create this archive only when needed.
+
+To load an extracted sharing archive without a marketplace, run:
+
+```sh
+claude --plugin-dir /path/to/extracted-package
+```
 
 ## Package contents
 

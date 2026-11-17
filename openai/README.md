@@ -6,15 +6,14 @@ no custom UI is required.
 
 ## Package contents
 
-This directory is a complete plugin. It contains portable `plugin.json` and
-`mcp.json` manifests, all five skills, the SVG icon, this README, the license and
-review preparation notes. Use this directory directly for local installation;
-no build step is required. All required files are contained in this directory.
+This directory contains the Wealthbox plugin for ChatGPT and Codex. It includes
+portable `plugin.json` and `mcp.json` manifests, a native Codex marketplace, five
+skills, the SVG icon, this README, the license and review preparation notes.
+No build step is required.
 
 The five advisor skills and icon have separate copies in this package and in
 `claude/`. Maintain the packages separately for now. When a change applies to both,
-update both copies. Claude Code uses only `claude/`. ChatGPT and Codex use this
-package and its portable manifests, with no Claude or legacy Codex manifest.
+update both copies.
 
 ## Install in Codex
 
