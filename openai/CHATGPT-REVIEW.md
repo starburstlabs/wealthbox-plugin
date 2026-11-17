@@ -4,10 +4,11 @@ This branch packages the production MCP connection and six advisor skills.
 Tool results and proposed writes are presented in conversation. There are no
 custom app views or app-bound approval flows in this package.
 
-OpenAI source lives in `openai/`. Run `python3 script/package_openai.py` from
-the repository root to assemble shared skills and assets into
-`dist/openai/wealthbox/` and `dist/wealthbox-openai.zip`. The existing Claude and
-Codex compatibility manifests keep their separate versions and paths.
+The complete OpenAI package is checked in under `openai/`, including copies of
+the five root advisor skills, the SVG icon and license. No build step is required.
+Use that directory for local installation, or follow its README to create a ZIP.
+The existing Claude and Codex compatibility manifests keep their separate
+versions and paths.
 
 The paired `crm-web` branch is `codex/wealthbox-mcp-tools-and-skills`, based on
 `f50ae18eb12`. It exposes the existing conversational CRM tool catalog. Package
@@ -16,7 +17,7 @@ validation cannot confirm which revision the production endpoint runs.
 ## Host checks
 
 Use a dedicated account and fictional records. These cases are **not run** in
-ChatGPT against the extracted production package yet.
+ChatGPT against the checked-in OpenAI package yet.
 
 | Setup and prompt | Expected tools and result |
 | --- | --- |

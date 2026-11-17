@@ -2,4 +2,3 @@
 *.log
 .env
 dist/
-__pycache__/

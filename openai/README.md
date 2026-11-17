@@ -4,39 +4,41 @@ Use Wealthbox MCP tools and six advisor skills in ChatGPT or Codex. Contact
 profiles, meeting briefs and proposed changes appear in the conversation;
 no custom UI is required.
 
-## Source and distribution
+## Package contents
 
-In the source repository, this directory owns the OpenAI `plugin.json`, `mcp.json`,
-review notes and the `wealthbox-workspace` skill. The five other advisor skills
-and the SVG icon are shared from the repository's `skills/` and `assets/` folders.
-The existing Claude and Codex compatibility files at the repository root are
-independent of this OpenAI release.
+This directory is a complete plugin. It contains portable `plugin.json` and
+`mcp.json` manifests, all six skills, the SVG icon, this README, the license and
+review preparation notes. Use this directory directly for local installation;
+no build step is required. All required files are contained in this directory.
 
-From the repository root, run Python 3.9 or newer:
+The five advisor skills and icon are checked-in copies of the root package's
+files. Maintain the packages separately for now. When a change applies to both,
+update both copies. The existing Claude and Codex compatibility files at the
+repository root keep their own versions and installation paths.
+
+## Create an upload archive
+
+From the repository root, run:
 
 ```sh
-python3 script/package_openai.py
+mkdir -p dist
+rm -f dist/wealthbox-openai.zip
+(cd openai && zip -r ../dist/wealthbox-openai.zip . -x '.DS_Store' '*/.DS_Store')
 ```
 
-The command assembles a complete plugin at `dist/openai/wealthbox/` and creates
-`dist/wealthbox-openai.zip`. An optional argument selects another ZIP destination.
-The generated folder and ZIP contain portable manifests at their root, all six
-skills, the shared SVG, this README, license and review preparation notes. They
-contain no private App binding, compatibility manifest, symlink or reference to
-files outside the package. `dist/` is ignored by Git.
-
-Use the generated folder for a local plugin installation, or the ZIP for a
-submission upload. This source directory is not a complete installable plugin
-until the shared files have been assembled.
+The ZIP contains `plugin.json`, `mcp.json`, all six skills, the SVG, README,
+license and review notes at its root. It contains no private App binding or
+compatibility manifest. `dist/` is ignored by Git. Upload this archive rather
+than an archive of the entire repository.
 
 ## Connection and behavior
 
 The MCP connection uses `https://mcp.crmworkspace.com/mcp` with OAuth read and
 write scopes. Connect an accessible Wealthbox workspace before running a workflow.
-Building the package does not deploy the server or verify its live catalog.
+Creating an archive does not deploy the server or verify its live catalog.
 
 The `wealthbox-workspace` skill resolves workspaces and contacts, presents saved
-profiles and open work in chat, and reviews proposed CRM writes. The shared
+profiles and open work in chat, and reviews proposed CRM writes. The other five
 skills cover client meeting preparation, service requests, onboarding data,
 recommendation documentation and clients affected by a change.
 
@@ -47,7 +49,8 @@ financial transactions are not executed.
 
 ## Release checks
 
-The builder validates the portable manifests, production OAuth configuration,
-skill inventory, icon references and absence of UI-only tool dependencies.
+Before release, check the manifests, production OAuth configuration, six-skill
+inventory, icon references and contained files. Confirm that the skills use only
+the conversational tools available from the connected server.
 See [release preparation](CHATGPT-REVIEW.md) for host checks and outstanding
-publication materials. A valid ZIP is not a completed public submission.
+publication materials. A complete package is not a completed public submission.

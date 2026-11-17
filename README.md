@@ -67,31 +67,26 @@ The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication u
 
 ## OpenAI package
 
-The OpenAI package has its own manifests, version, review notes and extra skill
-under [`openai/`](openai/README.md). The existing Claude and Codex files at the
-repository root keep their own version and installation paths.
+The complete OpenAI package is checked in under [`openai/`](openai/README.md).
+It contains its own manifests, six skills, SVG icon, license and review notes.
+Use that directory directly for local installation; no build step is required.
+The existing Claude and Codex files at the repository root keep their own
+versions and installation paths.
 
-From this repository root, run Python 3.9 or newer:
+The five advisor skills and icon in `openai/` are copies of the root files.
+Maintain the two packages separately for now. When a change applies to both,
+update both copies.
 
-```sh
-python3 script/package_openai.py
-```
-
-This builds `dist/openai/wealthbox/` and `dist/wealthbox-openai.zip`. The builder
-copies the five shared skills from `skills/`, the OpenAI-specific workspace skill
-from `openai/skills/`, and the shared SVG from `assets/`. The generated plugin is
-self-contained: its `plugin.json`, `mcp.json`, `skills/` and `assets/` are at its
-own root. Packaged manifests do not refer outside that generated package.
-
-To choose another ZIP location:
+To create a ZIP for upload, run from the repository root:
 
 ```sh
-python3 script/package_openai.py /private/tmp/wealthbox-mcp-tools-and-skills.zip
+mkdir -p dist
+rm -f dist/wealthbox-openai.zip
+(cd openai && zip -r ../dist/wealthbox-openai.zip . -x '.DS_Store' '*/.DS_Store')
 ```
 
-`dist/` is generated and ignored by Git. Build it before installing or uploading
-the OpenAI package; `openai/` by itself is source, not the complete distribution.
-See [OpenAI release preparation](openai/CHATGPT-REVIEW.md) for the host checks and
+The archive contains the contents of `openai/` at its root. `dist/` is ignored by
+Git. See [OpenAI release preparation](openai/CHATGPT-REVIEW.md) for host checks and
 remaining publication work.
 
 ## Package structure
@@ -100,9 +95,8 @@ remaining publication work.
 - `.claude-plugin/plugin.json` — Claude plugin metadata.
 - `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex.
 - `.mcp.json` — production Wealthbox MCP server connection.
-- `openai/` — OpenAI source manifests, release notes and platform-specific skill.
-- `script/package_openai.py` — OpenAI distribution builder and validator.
-- `dist/` — generated OpenAI plugin directory and ZIP; not committed.
+- `openai/` — complete OpenAI package with manifests, six skills, assets, license and release notes.
+- `dist/` — release ZIP files; not committed.
 - `skills/` — advisor workflows, each with a `SKILL.md` and a `references/acceptance-criteria.md`
   describing the scenarios it should handle correctly.
 
