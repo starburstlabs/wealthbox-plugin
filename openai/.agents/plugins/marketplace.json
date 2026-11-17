@@ -1,0 +1,20 @@
+{
+  "name": "wealthbox-openai",
+  "interface": {
+    "displayName": "Wealthbox for OpenAI"
+  },
+  "plugins": [
+    {
+      "name": "wealthbox-plugin",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

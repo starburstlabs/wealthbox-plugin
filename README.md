@@ -1,6 +1,15 @@
 # Wealthbox Plugin
 
-Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server. The plugin packages five advisor workflow skills for Claude Code and Codex.
+Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the official Wealthbox MCP server.
+
+This repository contains two complete packages:
+
+- [`claude/`](claude/README.md) contains the Claude Code package and its own marketplace, with five advisor skills.
+- [`openai/`](openai/README.md) contains the package for ChatGPT and Codex and its own Codex marketplace, with the same five advisor workflows as the Claude Code package.
+
+Both directories contain their required manifests, skills, icon and license.
+No build step is required. Select the correct package directory when registering
+a marketplace. There is no shared marketplace at the repository root.
 
 ## Skills
 
@@ -19,21 +28,28 @@ Each skill reads before it writes: it presents a proposal, exception list, or dr
 
 ## Setup
 
-Install the plugin in Claude Code or Codex, then connect your Wealthbox account.
+Clone the repository, then choose the package for your client:
+
+```sh
+git clone https://github.com/starburstlabs/wealthbox-plugin.git
+cd wealthbox-plugin
+```
+
+Run the following commands from that repository root, then connect your Wealthbox account.
 
 ### Claude Code
 
 Run these commands in your terminal:
 
 ```sh
-claude plugin marketplace add starburstlabs/wealthbox-plugin
+claude plugin marketplace add ./claude
 claude plugin install wealthbox-plugin@wealthbox-plugin
 ```
 
 To install from inside a Claude Code session instead, use the `/plugin` command:
 
 ```text
-/plugin marketplace add starburstlabs/wealthbox-plugin
+/plugin marketplace add ./claude
 /plugin install wealthbox-plugin@wealthbox-plugin
 ```
 
@@ -47,8 +63,8 @@ Run these commands in your terminal:
 # Enable the MCP protocol version that Wealthbox requires
 codex features enable mcp_2026_07_28
 
-codex plugin marketplace add starburstlabs/wealthbox-plugin
-codex plugin add wealthbox-plugin@wealthbox-plugin
+codex plugin marketplace add ./openai
+codex plugin add wealthbox-plugin@wealthbox-openai
 ```
 
 Start a new session, then run `codex plugin list` to confirm that the plugin is installed.
@@ -65,14 +81,47 @@ Run `/mcp` in either client to inspect the connection and available tools.
 
 The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication uses OAuth 2.0.
 
+## OpenAI package
+
+The complete OpenAI package is checked in under [`openai/`](openai/README.md).
+It contains its own manifests, five skills, SVG icon, license and review notes.
+Use that directory directly for local installation; no build step is required.
+Codex reads the portable manifests in this package. Claude Code uses only
+`claude/`; each package has its own version and installation directory.
+
+The five advisor skills and icon have separate copies in `claude/` and `openai/`.
+Maintain the two packages separately for now. When a change applies to both,
+update both copies.
+
+To create a ZIP for upload, run from the repository root:
+
+```sh
+mkdir -p dist
+rm -f dist/wealthbox-openai.zip
+(cd openai && zip -r ../dist/wealthbox-openai.zip . \
+  -x 'dist/*' '.agents/*' '__MACOSX/*' '*/__MACOSX/*' \
+     '.DS_Store' '*/.DS_Store' '._*' '*/._*')
+```
+
+The archive at `dist/wealthbox-openai.zip` contains the plugin files at its root
+and excludes the local marketplace, generated files and Mac metadata. Archives
+under `dist/` are ignored by Git and are not used by directory-based installation.
+For public distribution, use the OpenAI Developer Portal's **With MCP** flow and
+complete server connection and review. A private ZIP import in ChatGPT can be
+marked **Desktop only**, including when it declares a remote HTTPS MCP server.
+For private web testing, register the endpoint with **Add custom MCP server**
+and add the skills to that registered plugin. See the
+[OpenAI setup guide](openai/README.md#public-submission-and-private-web-testing)
+for the separate workflows, and see
+[OpenAI release preparation](openai/CHATGPT-REVIEW.md) for host checks and remaining
+publication work.
+
 ## Package structure
 
-- `.codex-plugin/plugin.json` contains Codex metadata and references the shared skills and MCP configuration.
-- `.claude-plugin/plugin.json` — Claude plugin metadata.
-- `.claude-plugin/marketplace.json` provides marketplace metadata for Claude Code and Codex.
-- `.mcp.json` — production Wealthbox MCP server connection.
-- `skills/` — advisor workflows, each with a `SKILL.md` and a `references/acceptance-criteria.md`
-  describing the scenarios it should handle correctly.
+- `claude/` contains only the Claude Code package, with its own `.claude-plugin/marketplace.json`, plugin manifest, MCP connection, five skills, icon, README and license.
+- `openai/` contains the ChatGPT and Codex package, with portable manifests, its own `.agents/plugins/marketplace.json`, five skills, icon, README, license and review notes.
+- `dist/` contains optional OpenAI release archives and private update artifacts and is not committed. `claude/dist/` contains optional Claude release archives. Create an archive only when needed for sharing or submission.
+- `LICENSE` contains the repository license; each package also contains a copy.
 
 ## Privacy Policy
 
