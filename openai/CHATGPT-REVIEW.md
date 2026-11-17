@@ -1,6 +1,6 @@
 # Wealthbox conversational release preparation
 
-This branch packages the production MCP connection and six advisor skills.
+This branch packages the production MCP connection and five advisor skills.
 Tool results and proposed writes are presented in conversation. There are no
 custom app views or app-bound approval flows in this package.
 
@@ -11,7 +11,7 @@ Use that directory for local installation, or follow its README to create a ZIP.
 Claude Code uses the separate `claude/` package and its own marketplace.
 Codex selects `openai/` through this package's native `.agents/` marketplace and
 uses the portable manifests. There is no shared root marketplace or legacy
-Codex manifest. Exclude `.agents/` from the public submission ZIP.
+Codex manifest. Exclude `.agents/` and `dist/` from the public submission ZIP.
 
 The paired `crm-web` branch is `codex/wealthbox-mcp-tools-and-skills`, based on
 `f50ae18eb12`. It exposes the existing conversational CRM tool catalog. Package

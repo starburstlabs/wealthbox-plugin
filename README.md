@@ -5,7 +5,7 @@ Advisor workflows for [Wealthbox](https://www.wealthbox.com) CRM, built on the o
 This repository contains two complete packages:
 
 - [`claude/`](claude/README.md) contains the Claude Code package and its own marketplace, with five advisor skills.
-- [`openai/`](openai/README.md) contains the package for ChatGPT and Codex and its own Codex marketplace, with the five advisor skills and an additional conversational workspace skill.
+- [`openai/`](openai/README.md) contains the package for ChatGPT and Codex and its own Codex marketplace, with the same five advisor workflows as the Claude Code package.
 
 Both directories contain their required manifests, skills, icon and license.
 No build step is required. Select the correct package directory when registering
@@ -84,7 +84,7 @@ The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication u
 ## OpenAI package
 
 The complete OpenAI package is checked in under [`openai/`](openai/README.md).
-It contains its own manifests, six skills, SVG icon, license and review notes.
+It contains its own manifests, five skills, SVG icon, license and review notes.
 Use that directory directly for local installation; no build step is required.
 Codex reads the portable manifests in this package. Claude Code uses only
 `claude/`; each package has its own version and installation directory.
@@ -96,21 +96,22 @@ update both copies.
 To create a ZIP for upload, run from the repository root:
 
 ```sh
-mkdir -p dist
-rm -f dist/wealthbox-openai.zip
-(cd openai && zip -r ../dist/wealthbox-openai.zip . -x '.agents/*' '.DS_Store' '*/.DS_Store')
+mkdir -p openai/dist
+rm -f openai/dist/wealthbox-openai.zip
+(cd openai && zip -r dist/wealthbox-openai.zip . -x 'dist/*' '.agents/*' '.DS_Store' '*/.DS_Store')
 ```
 
 The archive contains the plugin files at its root and excludes the local
-marketplace under `openai/.agents/`. `dist/` is ignored by Git. See
+marketplace under `openai/.agents/` and the output under `openai/dist/`. Archives
+are ignored by Git and are not used by directory-based installation. See
 [OpenAI release preparation](openai/CHATGPT-REVIEW.md) for host checks and remaining
 publication work.
 
 ## Package structure
 
 - `claude/` contains only the Claude Code package, with its own `.claude-plugin/marketplace.json`, plugin manifest, MCP connection, five skills, icon, README and license.
-- `openai/` contains the ChatGPT and Codex package, with portable manifests, its own `.agents/plugins/marketplace.json`, six skills, icon, README, license and review notes.
-- `dist/` contains release ZIP files and is not committed.
+- `openai/` contains the ChatGPT and Codex package, with portable manifests, its own `.agents/plugins/marketplace.json`, five skills, icon, README, license and review notes.
+- `claude/dist/` and `openai/dist/` contain optional release ZIP files and are not committed. Create an archive only when needed for sharing or submission.
 - `LICENSE` contains the repository license; each package also contains a copy.
 
 ## Privacy Policy

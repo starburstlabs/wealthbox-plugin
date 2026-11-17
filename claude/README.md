@@ -62,6 +62,21 @@ Run `/mcp` in Claude Code to inspect the connection and available tools.
 
 The bundled connection uses `https://mcp.crmworkspace.com/mcp`. Authentication uses OAuth 2.0.
 
+## Create a sharing archive
+
+Directory-based installation does not use a ZIP. To share this package as an
+archive, run from the repository root:
+
+```sh
+mkdir -p claude/dist
+rm -f claude/dist/wealthbox-claude.zip
+(cd claude && zip -r dist/wealthbox-claude.zip . -x 'dist/*' '.claude-plugin/marketplace.json' '.DS_Store' '*/.DS_Store')
+```
+
+The archive is written to `claude/dist/wealthbox-claude.zip`. It includes the
+plugin files and excludes the marketplace catalog and output `dist/` directory.
+`claude/dist/` is ignored by Git. Create this archive only when needed.
+
 ## Package contents
 
 - `.claude-plugin/plugin.json` contains Claude Code metadata.
