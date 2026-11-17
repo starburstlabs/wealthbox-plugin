@@ -96,14 +96,23 @@ update both copies.
 To create a ZIP for upload, run from the repository root:
 
 ```sh
-mkdir -p openai/dist
-rm -f openai/dist/wealthbox-openai.zip
-(cd openai && zip -r dist/wealthbox-openai.zip . -x 'dist/*' '.agents/*' '.DS_Store' '*/.DS_Store')
+mkdir -p dist
+rm -f dist/wealthbox-openai.zip
+(cd openai && zip -r ../dist/wealthbox-openai.zip . \
+  -x 'dist/*' '.agents/*' '__MACOSX/*' '*/__MACOSX/*' \
+     '.DS_Store' '*/.DS_Store' '._*' '*/._*')
 ```
 
-The archive contains the plugin files at its root and excludes the local
-marketplace under `openai/.agents/` and the output under `openai/dist/`. Archives
-are ignored by Git and are not used by directory-based installation. See
+The archive at `dist/wealthbox-openai.zip` contains the plugin files at its root
+and excludes the local marketplace, generated files and Mac metadata. Archives
+under `dist/` are ignored by Git and are not used by directory-based installation.
+For public distribution, use the OpenAI Developer Portal's **With MCP** flow and
+complete server connection and review. A private ZIP import in ChatGPT can be
+marked **Desktop only**, including when it declares a remote HTTPS MCP server.
+For private web testing, register the endpoint with **Add custom MCP server**
+and add the skills to that registered plugin. See the
+[OpenAI setup guide](openai/README.md#public-submission-and-private-web-testing)
+for the separate workflows, and see
 [OpenAI release preparation](openai/CHATGPT-REVIEW.md) for host checks and remaining
 publication work.
 
@@ -111,7 +120,7 @@ publication work.
 
 - `claude/` contains only the Claude Code package, with its own `.claude-plugin/marketplace.json`, plugin manifest, MCP connection, five skills, icon, README and license.
 - `openai/` contains the ChatGPT and Codex package, with portable manifests, its own `.agents/plugins/marketplace.json`, five skills, icon, README, license and review notes.
-- `claude/dist/` and `openai/dist/` contain optional release ZIP files and are not committed. Create an archive only when needed for sharing or submission.
+- `dist/` contains optional OpenAI release archives and private update artifacts and is not committed. `claude/dist/` contains optional Claude release archives. Create an archive only when needed for sharing or submission.
 - `LICENSE` contains the repository license; each package also contains a copy.
 
 ## Privacy Policy

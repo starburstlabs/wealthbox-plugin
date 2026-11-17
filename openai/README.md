@@ -31,27 +31,56 @@ The native Codex catalog at `.agents/plugins/marketplace.json` lists this packag
 with source path `./`. Start a new session and run `codex plugin list` to confirm
 installation. The repository root and `claude/` are not this package's marketplace.
 
-For ChatGPT submission, use the archive described below. Creating or installing
-a local package does not publish it to the public directory.
+For public ChatGPT submission, use the archive described below. Creating or
+installing a local package does not publish it to the public directory.
+
+## Public submission and private web testing
+
+This portable package supplies the MCP endpoint in `mcp.json`. For public
+distribution, submit it through the [OpenAI Developer Portal](https://platform.openai.com/plugins)
+using **With MCP**, then complete server connection, OAuth, domain verification,
+scans and review. Include the MCP configuration in the initial submission.
+Complete the remaining materials in [release preparation](CHATGPT-REVIEW.md)
+before submitting for review.
+
+Uploading this ZIP through ChatGPT's private plugin import is a different flow.
+An imported plugin with bundled MCP configuration can be marked **Desktop only**
+even when its server uses HTTPS. That import does not establish the hosted
+connection used by ChatGPT web.
+
+For private web testing, open **ChatGPT Plugins → + → Add custom MCP server**,
+enter `https://mcp.crmworkspace.com/mcp`, configure OAuth and create the plugin.
+Add these five skills to that registered plugin while preserving its generated
+App binding and manifest identity. Keep the private account export separate
+from this portable public-submission source. The author-supplied public ZIP
+must not contain `.app.json` or an `apps` declaration referencing a private App.
+
+See [Connect and test](https://developers.openai.com/plugins/deploy/connect-chatgpt)
+and [Public submission](https://developers.openai.com/plugins/deploy/submission)
+for the two workflows. Published users install the plugin and authorize their
+Wealthbox account; they do not manually configure its MCP endpoint.
 
 ## Create an upload archive
 
 From the repository root, run:
 
 ```sh
-mkdir -p openai/dist
-rm -f openai/dist/wealthbox-openai.zip
-(cd openai && zip -r dist/wealthbox-openai.zip . -x 'dist/*' '.agents/*' '.DS_Store' '*/.DS_Store')
+mkdir -p dist
+rm -f dist/wealthbox-openai.zip
+(cd openai && zip -r ../dist/wealthbox-openai.zip . \
+  -x 'dist/*' '.agents/*' '__MACOSX/*' '*/__MACOSX/*' \
+     '.DS_Store' '*/.DS_Store' '._*' '*/._*')
 ```
 
-The archive is written to `openai/dist/wealthbox-openai.zip`. Directory-based
+The archive is written to `dist/wealthbox-openai.zip`. Directory-based
 installation does not use it. Create it only when an upload is needed.
 
 The ZIP contains `plugin.json`, `mcp.json`, all five skills, the SVG, README,
 license and review notes at its root. It excludes the local `.agents/`
-marketplace and the output `dist/` directory, and contains no private App binding
-or compatibility manifest. `openai/dist/` is ignored by Git. Upload this archive
-rather than an archive of the entire repository.
+marketplace, generated files and Mac metadata, and contains no private App
+binding or compatibility manifest. The archive is outside the package directory
+and ignored by Git. Use it for the Developer Portal submission flow described
+above. Avoid Finder's **Compress** action, which can add `__MACOSX/` metadata.
 
 ## Connection and behavior
 

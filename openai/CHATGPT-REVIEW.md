@@ -13,6 +13,26 @@ Codex selects `openai/` through this package's native `.agents/` marketplace and
 uses the portable manifests. There is no shared root marketplace or legacy
 Codex manifest. Exclude `.agents/` and `dist/` from the public submission ZIP.
 
+## Choose the upload flow
+
+The public upload source contains `plugin.json`, `mcp.json`, skills and assets.
+It must exclude private `.app.json` bindings and `apps` declarations. Its MCP
+endpoint is already declared as `https://mcp.crmworkspace.com/mcp` with OAuth
+CIMD and read/write scopes; changing it to a private App ID is not the fix for
+web compatibility.
+
+After completing the remaining review materials, upload the archive through
+the [OpenAI Developer Portal](https://platform.openai.com/plugins) using
+**With MCP**. Connect the declared server under **MCPs**, complete domain
+verification and OAuth, and inspect the tools and scan results before submitting
+for review. The portal's server setup is required in addition to a valid ZIP.
+
+For private ChatGPT web testing, create a connection with **Add custom MCP
+server**, then add the five skills to that registered plugin. A private ZIP
+import of the portable package can be classified as **Desktop only** even
+though the endpoint uses HTTPS. Keep that import distinct from the registered
+hosted test connection and from the public submission workflow.
+
 The paired `crm-web` branch is `codex/wealthbox-mcp-tools-and-skills`, based on
 `f50ae18eb12`. It exposes the existing conversational CRM tool catalog. Package
 validation cannot confirm which revision the production endpoint runs.
@@ -37,10 +57,13 @@ ChatGPT against the checked-in OpenAI package yet.
 
 - Confirm the production MCP deployment and OAuth expose only the intended tools
   and no custom UI resources or entrypoints.
-- Run the host checks and prepare exactly five positive and three negative cases
-  with complete expected behavior in the public submission metadata.
+- Run the host checks and verify the five positive and three negative cases
+  already included in `plugin.json` against the live server.
 - Confirm the verified publisher, public listing/policy/support pages, supported
   countries, commerce declaration and release notes.
+- Prepare square PNG submission icons from the existing branding (listing logo
+  at least 256 × 256, composer icon at least 48 × 48) and update the manifest
+  references; the current package references an SVG.
 - Provision reviewer access using sample data, then record and verify a
   reviewer-accessible demo of the conversational flows.
 - Complete portal domain verification, OAuth setup, tool/skill scans and review.
