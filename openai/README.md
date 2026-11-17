@@ -13,8 +13,27 @@ no build step is required. All required files are contained in this directory.
 
 The five advisor skills and icon have separate copies in this package and in
 `claude/`. Maintain the packages separately for now. When a change applies to both,
-update both copies. The Claude Code package and its existing Codex compatibility
-files live in `claude/` and keep their own versions and installation paths.
+update both copies. Claude Code uses only `claude/`. ChatGPT and Codex use this
+package and its portable manifests, with no Claude or legacy Codex manifest.
+
+## Install in Codex
+
+Clone the repository and select this package directory:
+
+```sh
+git clone https://github.com/starburstlabs/wealthbox-plugin.git
+cd wealthbox-plugin
+codex features enable mcp_2026_07_28
+codex plugin marketplace add ./openai
+codex plugin add wealthbox-plugin@wealthbox-openai
+```
+
+The native Codex catalog at `.agents/plugins/marketplace.json` lists this package
+with source path `./`. Start a new session and run `codex plugin list` to confirm
+installation. The repository root and `claude/` are not this package's marketplace.
+
+For ChatGPT submission, use the archive described below. Creating or installing
+a local package does not publish it to the public directory.
 
 ## Create an upload archive
 
@@ -23,13 +42,14 @@ From the repository root, run:
 ```sh
 mkdir -p dist
 rm -f dist/wealthbox-openai.zip
-(cd openai && zip -r ../dist/wealthbox-openai.zip . -x '.DS_Store' '*/.DS_Store')
+(cd openai && zip -r ../dist/wealthbox-openai.zip . -x '.agents/*' '.DS_Store' '*/.DS_Store')
 ```
 
 The ZIP contains `plugin.json`, `mcp.json`, all six skills, the SVG, README,
-license and review notes at its root. It contains no private App binding or
-compatibility manifest. `dist/` is ignored by Git. Upload this archive rather
-than an archive of the entire repository.
+license and review notes at its root. It excludes the local `.agents/`
+marketplace and contains no private App binding or compatibility manifest.
+`dist/` is ignored by Git. Upload this archive rather than an archive of the
+entire repository.
 
 ## Connection and behavior
 

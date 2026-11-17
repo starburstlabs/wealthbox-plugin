@@ -8,8 +8,10 @@ The complete OpenAI package is checked in under `openai/`, including copies of
 the five advisor skills, SVG icon and license also included in `claude/`. No build
 step is required.
 Use that directory for local installation, or follow its README to create a ZIP.
-The Claude Code package and its Codex compatibility files live in `claude/`
-and keep their separate versions. The root marketplace points to that package.
+Claude Code uses the separate `claude/` package and its own marketplace.
+Codex selects `openai/` through this package's native `.agents/` marketplace and
+uses the portable manifests. There is no shared root marketplace or legacy
+Codex manifest. Exclude `.agents/` from the public submission ZIP.
 
 The paired `crm-web` branch is `codex/wealthbox-mcp-tools-and-skills`, based on
 `f50ae18eb12`. It exposes the existing conversational CRM tool catalog. Package
